@@ -7,6 +7,8 @@ import {
 } from 'expo-auth-session';
 import { Button } from 'react-native';
 import { useBoundStore } from '@/stores/useBoundStore';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native-reanimated/lib/typescript/Animated';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -37,9 +39,9 @@ export default function Login() {
     if (response?.type === 'success') {
       const { code } = response.params;
 
-      console.log('response:', response);
-      console.log('response.params:', response.params);
-      console.log('code:', code);
+      // console.log('response:', response);
+      // console.log('response.params:', response.params);
+      // console.log('code:', code);
 
       exchangeCodeAsync(
         {
@@ -64,12 +66,17 @@ export default function Login() {
   }, [response]);
 
   return (
-    <Button
-      disabled={!request}
-      title='Login'
-      onPress={() => {
-        promptAsync();
-      }}
-    />
+    <SafeAreaView
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+    >
+      <Button
+        color={'#e26d36'}
+        disabled={!request}
+        title='Login'
+        onPress={() => {
+          promptAsync();
+        }}
+      />
+    </SafeAreaView>
   );
 }

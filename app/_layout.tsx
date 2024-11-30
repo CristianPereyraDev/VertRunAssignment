@@ -1,6 +1,6 @@
 import { useProtectedRoute } from '@/hooks/useProtectedRoute';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { Stack } from 'expo-router';
+import { Redirect, Stack } from 'expo-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 export const unstable_settings = {
@@ -19,6 +19,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <Stack>
         <Stack.Screen name='(auth)/(tabs)' />
+        <Stack.Screen name='(auth)/(activities)/[month]' />
         <Stack.Screen name='(public)/login' />
       </Stack>
     </QueryClientProvider>
