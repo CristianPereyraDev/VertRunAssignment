@@ -1,56 +1,26 @@
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, ActivityIndicator, FlatList } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 
 import Activity from '@/components/Activity';
 import { useActivities } from '@/hooks/useActivities';
+import { IActivity } from '@/stores/createActivitySlice';
+
+const renderItem = ({ item }: { item: IActivity }) => (
+  <Activity
+    key={item.id}
+    name={item.name}
+    date={item.date}
+    distance={item.distance}
+    time={item.time}
+    totalElevationGain={item.totalElevationGain}
+  />
+);
 
 export default function RecentActivities() {
-  const { isLoading, refetch, activities } = useActivities();
+  const { isLoading, isFetching, isError, refetch, activities } =
+    useActivities();
 
-  if (activities) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 5,
-        }}
-      >
-        {activities.map((activity) => (
-          <Activity
-            key={activity.id}
-            name={activity.name}
-            date={activity.date}
-            distance={activity.distance}
-            time={activity.time}
-            totalElevationGain={activity.totalElevationGain}
-          />
-        ))}
-
-        <Button
-          title='Refetch'
-          onPress={() => {
-            refetch();
-          }}
-        />
-      </View>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Text>Cargando...</Text>
-      </View>
-    );
-  }
+  console.log(isLoading);
 
   return (
     <View
@@ -60,7 +30,59 @@ export default function RecentActivities() {
         alignItems: 'center',
       }}
     >
-      <Text>ERROR</Text>
+      {activities.length > 0 && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 16,
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={activities}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
+              ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+            />
+          </View>
+
+          <View style={{ flex: 0 }}>
+            <Button
+              title='Refetch'
+              onPress={() => {
+                refetch();
+              }}
+              color={'#e65d27'}
+            />
+          </View>
+        </View>
+      )}
+
+      {(isLoading || isFetching) && (
+        <View
+          style={{
+            position: 'absolute',
+            left: 8,
+            top: 8,
+          }}
+        >
+          <ActivityIndicator size={'large'} />
+        </View>
+      )}
+
+      {isError && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text>An error has been occurred</Text>
+        </View>
+      )}
     </View>
   );
 }

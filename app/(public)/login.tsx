@@ -8,7 +8,6 @@ import {
 import { Button } from 'react-native';
 import { useBoundStore } from '@/stores/useBoundStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View } from 'react-native-reanimated/lib/typescript/Animated';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -23,7 +22,6 @@ export default function Login() {
   const setUser = useBoundStore((state) => state.setUser);
 
   const redirectUri = makeRedirectUri({
-    // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
     native: 'myapp://redirect',
   });
   const [request, response, promptAsync] = useAuthRequest(
@@ -39,10 +37,6 @@ export default function Login() {
     if (response?.type === 'success') {
       const { code } = response.params;
 
-      // console.log('response:', response);
-      // console.log('response.params:', response.params);
-      // console.log('code:', code);
-
       exchangeCodeAsync(
         {
           clientId: '141420',
@@ -51,7 +45,7 @@ export default function Login() {
           extraParams: {
             // You must use the extraParams variation of clientSecret.
             // Never store your client secret on the client.
-            client_secret: 'ae1ad37d058242dd01c569d47c1f6c8aa8bb578c',
+            client_secret: process.env.EXPO_PUBLIC_CLIENT_SECRET || '',
           },
         },
         { tokenEndpoint: 'https://www.strava.com/oauth/token' }
@@ -72,7 +66,7 @@ export default function Login() {
       <Button
         color={'#e26d36'}
         disabled={!request}
-        title='Login'
+        title='Login in to Strava'
         onPress={() => {
           promptAsync();
         }}

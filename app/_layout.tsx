@@ -1,10 +1,9 @@
 import { useProtectedRoute } from '@/hooks/useProtectedRoute';
 import { useBoundStore } from '@/stores/useBoundStore';
-import { Redirect, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '/login',
 };
 
@@ -18,9 +17,17 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <Stack>
-        <Stack.Screen name='(auth)/(tabs)' />
-        <Stack.Screen name='(auth)/(activities)/[month]' />
-        <Stack.Screen name='(public)/login' />
+        <Stack.Screen name='(auth)/(tabs)' options={{ headerShown: false }} />
+        <Stack.Screen
+          name='(auth)/(activities)/[month]'
+          options={{
+            headerShown: true,
+            headerBackTitle: 'Back',
+            headerTitleAlign: 'center',
+            title: 'Activities of the Month',
+          }}
+        />
+        <Stack.Screen name='(public)/login' options={{ headerShown: false }} />
       </Stack>
     </QueryClientProvider>
   );

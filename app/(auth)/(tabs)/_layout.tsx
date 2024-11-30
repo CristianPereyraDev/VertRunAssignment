@@ -1,10 +1,6 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
-
-// import Colors from "@/constants/Colors";
-// import { useColorScheme } from "@/components/useColorScheme";
+import { Tabs } from 'expo-router';
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
@@ -14,28 +10,28 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  //   const colorScheme = useColorScheme();
-
   return (
     <Tabs
-      screenOptions={
-        {
-          //tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        }
-      }
+      screenOptions={{
+        tabBarStyle: { backgroundColor: '#2c2c2c' },
+        tabBarActiveTintColor: '#e26d36',
+        headerTitleAlign: 'center',
+      }}
     >
       <Tabs.Screen
         name='index'
         options={{
-          title: 'Resent Activities',
-          tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
+          title: 'Your Resent Activities',
+          tabBarIcon: ({ color }) => <TabBarIcon name='bolt' color={color} />,
         }}
       />
       <Tabs.Screen
         name='stats'
         options={{
-          title: 'Stats',
-          tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
+          title: 'Your Stats (Last three months)',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name='bar-chart' color={color} />
+          ),
         }}
       />
     </Tabs>

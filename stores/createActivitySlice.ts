@@ -31,24 +31,25 @@ export const createActivitySlice: StateCreator<
   aggregatedActivities: {},
   aggregateActivities: (activities) =>
     set((state) => {
-      const aggregated = { ...state.aggregatedActivities };
+      const aggregated: Record<number, AggregatedActivity> = {};
+      const currentMonth = new Date().getMonth();
 
       for (const activity of activities) {
-        const elapsedMonths = getActivityMonth(activity);
+        const activityMonth = getActivityMonth(activity);
 
-        if (elapsedMonths >= 0 && elapsedMonths < 12) {
-          if (!Object.hasOwn(aggregated, elapsedMonths)) {
-            aggregated[elapsedMonths] = {
-              month: elapsedMonths,
+        if (activityMonth >= 0 && currentMonth - activityMonth < 3) {
+          if (!Object.hasOwn(aggregated, activityMonth)) {
+            aggregated[activityMonth] = {
+              month: activityMonth,
               totalDistance: activity.distance,
               totalElevationGain: activity.totalElevationGain,
               totalTime: activity.time,
             };
           } else {
-            aggregated[elapsedMonths].totalDistance += activity.distance;
-            aggregated[elapsedMonths].totalElevationGain +=
+            aggregated[activityMonth].totalDistance += activity.distance;
+            aggregated[activityMonth].totalElevationGain +=
               activity.totalElevationGain;
-            aggregated[elapsedMonths].totalTime += activity.time;
+            aggregated[activityMonth].totalTime += activity.time;
           }
         }
       }

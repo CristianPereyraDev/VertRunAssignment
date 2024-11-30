@@ -37,7 +37,7 @@ export default function Activity({
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: '#e26d36', padding: 8 },
+  container: { backgroundColor: '#e26d36', padding: 8, borderRadius: 8 },
   cardTextTitle: {
     fontSize: 20,
     textAlign: 'center',
